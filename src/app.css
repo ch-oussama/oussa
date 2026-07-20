@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Space+Grotesk:wght@300;400;600;700&family=Cairo:wght@400;600;700;900&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+    body {
+        @apply bg-[#0a0a0f] text-white overflow-hidden m-0 p-0;
+    }
+    * {
+        @apply selection:bg-blue-500/30 selection:text-white;
+    }
+}
+
+/* ═══════════════════════════════════════
+   GLASS CARD - Smooth hover
+   ═══════════════════════════════════════ */
+.glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.glass-card:hover {
+    @apply border-white/20 bg-white/8;
+    box-shadow: 0 8px 40px 0 rgba(59,130,246,0.12), 0 0 0 1px rgba(59,130,246,0.1);
+    transform: translateY(-3px);
+}
+
+/* ═══════════════════════════════════════
+   MAGNETIC BUTTON - Smooth pull to cursor
+   ═══════════════════════════════════════ */
+.magnetic-btn {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
+}
+.magnetic-btn:hover {
+    transform: scale(1.05);
+}
+.magnetic-btn:active {
+    transform: scale(0.95);
+}
+
+/* ═══════════════════════════════════════
+   TILT CARD - 3D perspective tilt
+   ═══════════════════════════════════════ */
+.tilt-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+}
+.tilt-card:hover {
+    transform: rotateX(2deg) rotateY(-2deg) scale(1.02) translateZ(10px);
+}
+
+/* ═══════════════════════════════════════
+   RIPPLE - Click ripple effect
+   ═══════════════════════════════════════ */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(96, 165, 250, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+    opacity: 0;
+}
+.ripple:active::after {
+    width: 400px;
+    height: 400px;
+    opacity: 1;
+    transition: 0s;
+}
+
+/* ═══════════════════════════════════════
+   HOVER GLOW - Sweep light effect
+   ═══════════════════════════════════════ */
+.hover-glow {
+    position: relative;
+    overflow: hidden;
+}
+.hover-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.6s ease;
+    z-index: 0;
+}
+.hover-glow:hover::before {
+    left: 100%;
+}
+
+/* ═══════════════════════════════════════
+   NAV LINK - Smooth underline animation
+   ═══════════════════════════════════════ */
+.nav-link {
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.3s ease;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    border-radius: 2px;
+    transition: width 0.3s ease, left 0.3s ease;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+    left: 0;
+}
+.nav-link.active {
+    color: #60a5fa;
+    text-shadow: 0 0 12px rgba(96, 165, 250, 0.8);
+}
+
+/* ═══════════════════════════════════════
+   ICON HOVER - Scale + Glow
+   ═══════════════════════════════════════ */
+.icon-hover {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.icon-hover:hover {
+    transform: scale(1.15) translateY(-3px);
+}
+.icon-hover:active {
+    transform: scale(0.9);
+}
+
+/* ═══════════════════════════════════════
+   SMOOTH BUTTON - All buttons smooth
+   ═══════════════════════════════════════ */
+.smooth-btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.smooth-btn:hover {
+    transform: translateY(-2px);
+}
+.smooth-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* ═══════════════════════════════════════
+   CARD FLIP
+   ═══════════════════════════════════════ */
+.flip-card {
+    perspective: 1000px;
+}
+.flip-card-inner {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-style: preserve-3d;
+}
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(5deg) rotateX(2deg);
+}
+
+/* ═══════════════════════════════════════
+   GLOW PULSE
+   ═══════════════════════════════════════ */
+.glow-pulse {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.5), 0 0 60px rgba(59, 130, 246, 0.2); }
+}
+
+/* ═══════════════════════════════════════
+   HOVER LIFT
+   ═══════════════════════════════════════ */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════
+   TEXT SCRAMBLE EFFECT
+   ═══════════════════════════════════════ */
+.text-scramble:hover {
+    animation: textScramble 0.3s ease;
+}
+@keyframes textScramble {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-1px); }
+    100% { transform: translateX(0); }
+}
+
+/* ═══════════════════════════════════════
+   BORDER GLOW
+   ═══════════════════════════════════════ */
+.border-glow {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.border-glow:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.15), inset 0 0 20px rgba(59, 130, 246, 0.05);
+}
+
+/* ═══════════════════════════════════════
+   HOVER SCALE IMG
+   ═══════════════════════════════════════ */
+.img-zoom {
+    overflow: hidden;
+}
+.img-zoom img {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.img-zoom:hover img {
+    transform: scale(1.1);
+}
+
+/* ═══════════════════════════════════════
+   STAGGER ANIMATION
+   ═══════════════════════════════════════ */
+.stagger-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: staggerIn 0.5s ease-out forwards;
+}
+@keyframes staggerIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   PAGE TRANSITION
+   ═══════════════════════════════════════ */
+.page-transition {
+    animation: pageIn 0.5s ease-out;
+}
+@keyframes pageIn {
+    0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ═══════════════════════════════════════
+   TYPING CURSOR
+   ═══════════════════════════════════════ */
+.typing-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1em;
+    background: linear-gradient(180deg, #3b82f6, #60a5fa);
+    animation: blink 1s infinite;
+    margin-left: 2px;
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════
+   GRADIENT TEXT
+   ═══════════════════════════════════════ */
+.text-gradient {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ═══════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════ */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-white/20 rounded-full; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { @apply bg-blue-400/50; }
+
+/* ═══════════════════════════════════════
+   FOCUS STYLES
+   ═══════════════════════════════════════ */
+button:focus-visible, a:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+html { scroll-behavior: smooth; }
