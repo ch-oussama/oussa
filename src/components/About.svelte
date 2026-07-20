@@ -160,7 +160,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-y-4 gap-x-3 relative z-10">
                         {#each [
-                            { label: 'Age', value: '21', unit: 'YRS' },
+                            { label: 'Age', value: '25', unit: 'YRS' },
                             { label: 'Location', value: 'Algeria', unit: '' },
                             { label: 'Experience', value: '6+', unit: 'YRS' },
                             { label: 'Specialty', value: 'Game Dev', unit: '' },
