@@ -2,10 +2,6 @@
     import { onMount } from 'svelte';
     
     let particlesContainer: HTMLDivElement;
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
     let typedText = '';
     const fullText = 'SENIOR ENGINEER';
     let charIndex = 0;
@@ -15,6 +11,27 @@
     let cardTilt = { x: 0, y: 0 };
     
     onMount(() => {
+        // Remove Spline Logo & Loading Background
+        let attempts = 0;
+        const removeLogoInterval = setInterval(() => {
+            attempts++;
+            const viewer = document.querySelector('spline-viewer');
+            if (viewer && viewer.shadowRoot) {
+                const logo = viewer.shadowRoot.querySelector('#logo');
+                if (logo) logo.remove();
+
+                const preloader = viewer.shadowRoot.querySelector('#preloader');
+                if (preloader) {
+                    preloader.style.backgroundColor = 'transparent';
+                    preloader.style.background = 'transparent';
+                }
+                
+                const canvas = viewer.shadowRoot.querySelector('canvas');
+                if (canvas) canvas.style.backgroundColor = 'transparent';
+            }
+            if (attempts > 20) clearInterval(removeLogoInterval);
+        }, 200);
+
         // Particle system
         const particleCount = 50;
         for (let i = 0; i < particleCount; i++) {
@@ -70,25 +87,7 @@
             }
         }, 100);
         
-        // Smooth mouse tracking
-        const handleMouseMove = (e: MouseEvent) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        };
-        
-        let animFrame: number;
-        const animate = () => {
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-            animFrame = requestAnimationFrame(animate);
-        };
-        
-        window.addEventListener('mousemove', handleMouseMove);
-        animFrame = requestAnimationFrame(animate);
-        
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            cancelAnimationFrame(animFrame);
             clearInterval(typeInterval);
         };
     });
@@ -110,20 +109,11 @@
     }
 </script>
 
-<div class="absolute inset-0 -z-10 overflow-hidden" bind:this={particlesContainer}></div>
+<svelte:head>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.36/build/spline-viewer.js"></script>
+</svelte:head>
 
-<!-- Tiny mouse follower -->
-<div 
-    class="fixed pointer-events-none z-[9999] transition-transform duration-100 ease-out"
-    style="left: {cursorX}px; top: {cursorY}px; transform: translate(-50%, -50%) scale({isHovering ? 1.5 : 1});"
->
-    <div class="relative">
-        <div class="absolute inset-[-8px] rounded-full border border-blue-400/30 transition-all duration-300 {isHovering ? 'border-blue-400/60 scale-125' : ''}"></div>
-        <div class="w-[40px] h-[40px] rounded-full overflow-hidden border-2 border-white/30 shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300">
-            <img src="/loge.png" alt="" class="w-full h-full object-cover">
-        </div>
-    </div>
-</div>
+<div class="absolute inset-0 -z-10 overflow-hidden" bind:this={particlesContainer}></div>
 
 <div class="flex flex-col lg:flex-row justify-between items-center px-[5%] h-full pt-20 pb-10">
     <!-- Left -->
@@ -182,22 +172,13 @@
     </div>
     
 
-    <!-- Center - Avatar -->
-    <div class="hidden lg:flex flex-1 justify-center items-center z-10 -mx-10">
-        <div class="relative group cursor-pointer"
+    <!-- Center - Spline Robot -->
+    <div class="hidden lg:flex flex-1 justify-center items-center z-10 -mx-10 mt-40">
+        <div class="relative group cursor-pointer w-[800px] h-[800px]"
             on:mouseenter={() => isHovering = true}
             on:mouseleave={() => isHovering = false}
         >
-            <div class="absolute inset-[-30px] rounded-full bg-gradient-to-br from-blue-500/20 via-cyan-500/10 to-indigo-500/20 blur-2xl animate-pulse-slow group-hover:from-blue-500/30 group-hover:via-cyan-500/20 group-hover:to-indigo-500/30 transition-all duration-500"></div>
-            <div class="absolute inset-[-18px] rounded-full border-2 border-dashed border-blue-400/30 animate-rotate-slow group-hover:border-blue-400/50 transition-colors duration-300"></div>
-            <div class="relative w-[220px] h-[220px] rounded-full overflow-hidden border-2 border-white/20 shadow-[0_0_40px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_80px_rgba(59,130,246,0.6)] transition-all duration-500 group-hover:scale-105">
-                <img src="/loge.png" alt="Oussama" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/30 to-transparent"></div>
-            </div>
-            <div class="absolute bottom-5 right-5 w-4 h-4 bg-blue-400 rounded-full border-2 border-[#0a0a0f] shadow-[0_0_10px_rgba(59,130,246,0.8)] animate-pulse group-hover:scale-125 transition-transform duration-300"></div>
-            <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 whitespace-nowrap group-hover:bg-white/15 group-hover:border-blue-400/30 transition-all duration-300">
-                <span class="text-[10px] font-bold text-blue-400 tracking-wider uppercase">Senior Engineer</span>
-            </div>
+            <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" class="w-full h-full"></spline-viewer>
         </div>
     </div>
 

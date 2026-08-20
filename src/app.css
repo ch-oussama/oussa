@@ -9,6 +9,7 @@
     }
     * {
         @apply selection:bg-blue-500/30 selection:text-white;
+        cursor: none !important;
     }
 }
 
@@ -299,3 +300,17 @@ button:focus-visible, a:focus-visible {
 }
 
 html { scroll-behavior: smooth; }
+
+spline-viewer::part(logo) {
+    display: none !important;
+}
+
+spline-viewer {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.custom-scrollbar {
+    scroll-behavior: smooth;
+}

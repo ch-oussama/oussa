@@ -1,5 +1,6 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';
+  import { onMount } from 'svelte';
   import Navbar from './components/Navbar.svelte';
   import Home from './components/Home.svelte';
   import About from './components/About.svelte';
@@ -10,7 +11,57 @@
   function handleNavigate(event: CustomEvent<string>) {
     currentSection = event.detail;
   }
+
+  // --- Custom Cursor Logic ---
+  let cursorEl: HTMLDivElement;
+  let mouseX = 0;
+  let mouseY = 0;
+  let isHovering = false;
+
+  onMount(() => {
+    let cX = window.innerWidth / 2;
+    let cY = window.innerHeight / 2;
+
+    const handleMouseMove = (e: MouseEvent) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        const target = e.target as HTMLElement;
+        isHovering = !!target.closest('a, button, .cursor-pointer, .hover-glow, .smooth-btn, [role="button"]');
+    };
+
+    let animFrame: number;
+    const animate = () => {
+        cX += (mouseX - cX) * 0.15;
+        cY += (mouseY - cY) * 0.15;
+        if (cursorEl) {
+            cursorEl.style.transform = `translate3d(${cX}px, ${cY}px, 0)`;
+        }
+        animFrame = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    animFrame = requestAnimationFrame(animate);
+
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        cancelAnimationFrame(animFrame);
+    };
+  });
 </script>
+
+<!-- Tiny mouse follower -->
+<div 
+    bind:this={cursorEl}
+    class="fixed top-0 left-0 pointer-events-none z-[99999]"
+    style="will-change: transform;"
+>
+    <div class="relative transition-transform duration-300 ease-out" style="transform: translate(-50%, -50%) scale({isHovering ? 1.5 : 1});">
+        <div class="absolute inset-[-3px] rounded-full border border-blue-400/30 transition-all duration-300 {isHovering ? 'border-blue-400/60 scale-125' : ''}"></div>
+        <div class="w-[40px] h-[40px] rounded-full overflow-hidden border-2 border-white/30 shadow-[0_0_15px_rgba(59,130,246,0.5)] transition-all duration-300">
+            <img src="/loge.png" alt="" class="w-full h-full object-cover">
+        </div>
+    </div>
+</div>
 
 <div class="fixed inset-0 pointer-events-none -z-10 bg-[#0a0a0f] overflow-hidden">
     <!-- Animated Glowing Blobs - Dark Theme -->

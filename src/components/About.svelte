@@ -98,7 +98,7 @@
     });
 </script>
 
-<div class="h-full w-full overflow-y-auto px-[4%] py-5 custom-scrollbar z-10 relative mt-20">
+<div class="h-full w-full overflow-y-auto scroll-smooth px-[4%] py-5 custom-scrollbar z-10 relative mt-20">
     <div class="max-w-[1100px] mx-auto pb-20">
 
         <!-- ══════════ HERO CARD ══════════ -->
@@ -160,7 +160,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-y-4 gap-x-3 relative z-10">
                         {#each [
-                            { label: 'Age', value: '25', unit: 'YRS' },
+                            { label: 'Age', value: '20', unit: 'YRS' },
                             { label: 'Location', value: 'Algeria', unit: '' },
                             { label: 'Experience', value: '6+', unit: 'YRS' },
                             { label: 'Specialty', value: 'Game Dev', unit: '' },
