@@ -1,0 +1,91 @@
+---
+name: add-sylva-living-world
+description: "Build Sylva Living World from its verified authored source using Three.js r149, including the complete renderer, interactions, and required assets. Use when Codex needs to implement, port, or adapt this effect without requiring the ThreeUI package or reconstructing the visual from an approximation."
+---
+
+# Build Sylva Living World
+
+## Description
+
+A scene-only procedural world that shifts from living green moss roots into mossy boughs in Sakura blossom, Maple autumn leaf, or Sequoia foliage — each in its own light.
+
+Recreate the authored behavior from the verified source, not from screenshots or the abbreviated orchestration sample in this skill. The implementation may live directly in the target project and does not require `@designcodeio/threeui`.
+
+## Technologies
+
+- React sandbox host
+- Byte-exact authored HTML
+- Three.js r149
+- Procedural ShaderMaterials
+- Instanced moss, ferns, flowers, and pollen
+- Visibility-aware lifecycle
+
+## Verified source material
+
+- `src/shaders/sylva-living-world/SylvaLivingWorldScene.tsx`
+- `src/shaders/sylva-living-world/sources/inner-green-3d.html`
+- `src/shaders/sylva-living-world/sources/inner-green-assets/three.min.js`
+
+Source revision: `SHA-256 fd922291297d`
+
+## Implementation steps
+
+1. Open every verified source file listed above and identify the renderer, host lifecycle, styles, and assets before editing.
+2. Keep the complete inner-green-3d.html document byte-for-byte as the canonical provenance source and carry its local MIT Three.js r149 runtime.
+3. Isolate only the authored #scene canvas and the empty stage sizing anchor; omit the dock, headings, cards, buttons, statistics, guides, wordmark, and scroll affordance.
+4. Preserve the root and ridge geometry, moss blades, ferns, flowers, pollen, scan-light entrance, butterfly, pointer parting, parallax, camera, and responsive framing.
+5. Inline the local Three.js runtime into the sandbox document so the scene has no remote or same-origin dependency.
+6. Mount the allow-scripts-only iframe only while its host and document are visible, and keep the authored reduced-motion still-frame path.
+7. Give the local component a sized, overflow-controlled parent and verify desktop, mobile, reduced-motion, and context-loss behavior.
+
+Asset handling: This effect has no required external assets.
+
+## Local component example
+
+Import the copied local component rather than a package entrypoint:
+
+```tsx
+import { SylvaLivingWorldScene } from "./effects/sylva-living-world/SylvaLivingWorldScene";
+import "./effects/sylva-living-world/styles.css";
+
+export function Scene() {
+  return <div className="effect-frame"><SylvaLivingWorldScene /></div>;
+}
+```
+
+## Core renderer pattern
+
+This excerpt documents orchestration only. Copy the exact shader, geometry, pass, and interaction code from the verified source files.
+
+```tsx
+<SylvaLivingWorldScene />
+```
+
+## Behavior contract
+
+- Runtime: Three.js r149
+- Passes: 1 live Three.js scene render with procedural ShaderMaterials, CanvasTextures, and instancing
+- Interaction: Pointer-driven moss parting, camera parallax, pollen trails, scan-light entrance, and butterfly flight
+- Assets: No binary assets — the canonical HTML and local MIT Three.js runtime are carried as source
+- **renderer** (sandbox): Three.js r149
+- **variant** (choice): Living Green | Sakura Sunset | Maple Autumn | Sequoia Mist
+- **scene** (choice): Moss roots | one shared bough world in Sakura, Maple, or Sequoia dress
+- **presentation** (fixed): Scene only; source page UI removed
+- **interaction** (pointer): Moss response + pollen + parallax
+- **motion** (adaptive): Visibility + reduced motion
+- **pixelRatio** (adaptive): ≤ 2
+- **assets** (fixed): No binary scene assets
+
+## Verification
+
+1. Compare the rendered composition, animation timing, pointer behavior, and state transitions with the source implementation.
+2. Exercise resize, high-DPI, mobile/coarse-pointer, reduced-motion, tab visibility, and WebGL context-loss paths where applicable.
+3. Confirm every animation frame, observer, listener, geometry, buffer, texture, framebuffer, material, and renderer is released on teardown.
+4. Check the browser console and confirm the effect renders at native-or-better backing resolution.
+
+## Guardrails
+
+- Do not substitute a visually similar package, demo, shader, or runtime.
+- Do not approximate, reconstruct, or simplify the authored GLSL, render passes, geometry, interaction state, or assets.
+- Keep exact source and asset hashes under regression tests when the source project provides them.
+- Adapt only the surrounding host boundary needed by the target project; keep renderer behavior intact.

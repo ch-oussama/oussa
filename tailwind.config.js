@@ -4,17 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgMain: '#0a0a0f',
+        bgMain: '#0E0C09',
         bgCard: 'rgba(255, 255, 255, 0.04)',
         textMain: '#ffffff',
         textMuted: '#7a7a8a',
-        accentOrange: '#3b82f6',
-        accentPink: '#60a5fa',
-        accentPurple: '#818cf8',
-        accentCyan: '#38bdf8',
+        accentOrange: '#D4A373',
+        accentPink: '#E1E0CC',
+        accentPurple: '#C68B4E',
+        accentCyan: '#D6C9A8',
         accentGreen: '#34d399',
-        accentPrimary: '#3b82f6',
-        accentSecondary: '#818cf8',
+        accentPrimary: '#D4A373',
+        accentSecondary: '#C68B4E',
       },
       fontFamily: {
         sans: ['Space Grotesk', 'Cairo', 'sans-serif'],
@@ -86,9 +86,9 @@ export default {
         },
       },
       boxShadow: {
-        'glow-blue': '0 0 20px rgba(59, 130, 246, 0.4)',
-        'glow-blue-lg': '0 0 40px rgba(59, 130, 246, 0.5)',
-        'glow-cyan': '0 0 20px rgba(56, 189, 248, 0.4)',
+        'glow-blue': '0 0 20px rgba(212, 163, 115, 0.4)',
+        'glow-blue-lg': '0 0 40px rgba(212, 163, 115, 0.5)',
+        'glow-cyan': '0 0 20px rgba(214, 201, 168, 0.4)',
         'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
         'glass-lg': '0 8px 40px 0 rgba(0, 0, 0, 0.4)',
       },

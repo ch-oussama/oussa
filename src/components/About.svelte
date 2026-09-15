@@ -1,13 +1,14 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import SylvaScene from './SylvaScene.svelte';
 
     let logLines: { time: string; level: string; levelColor: string; msg: string }[] = [
         { time: '20:24:01', level: 'WRN', levelColor: '#f59e0b', msg: '[Unity] Build optimization in progress' },
-        { time: '20:23:45', level: 'INF', levelColor: '#38bdf8', msg: '[Unreal] Shader compilation complete' },
+        { time: '20:23:45', level: 'INF', levelColor: '#D6C9A8', msg: '[Unreal] Shader compilation complete' },
         { time: '20:22:12', level: 'OK',  levelColor: '#34d399', msg: '[Server] Game server connection STABLE' },
-        { time: '20:21:05', level: 'SYS', levelColor: '#818cf8', msg: '[DevTools] Game engine processes active' },
+        { time: '20:21:05', level: 'SYS', levelColor: '#C68B4E', msg: '[DevTools] Game engine processes active' },
         { time: '20:15:00', level: 'OK',  levelColor: '#34d399', msg: '[Portfolio] Runtime active - V3.0 deployed' },
-        { time: '20:12:33', level: 'INF', levelColor: '#38bdf8', msg: '[Git] Pushed 14 commits to main' },
+        { time: '20:12:33', level: 'INF', levelColor: '#D6C9A8', msg: '[FiveM] Lua scripts injected and running' },
         { time: '20:10:00', level: 'OK',  levelColor: '#34d399', msg: '[Build] Compilation successful - 0 errors' },
     ];
 
@@ -24,10 +25,44 @@
     let cpuValue = '12%';
     let netValue = '24ms';
     let cursorVisible = true;
+    
+    let terminalInput = '';
+    let terminalInputRef: HTMLInputElement;
+
+    function handleTerminalKeydown(e: KeyboardEvent) {
+        if (e.key === 'Enter' && terminalInput.trim() !== '') {
+            const cmd = terminalInput.trim();
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            
+            logLines = [...logLines, { time: timeStr, level: 'USR', levelColor: '#ffffff', msg: `> ${cmd}` }];
+            terminalInput = '';
+            
+            setTimeout(() => {
+                const responses = [
+                    "[System] Access granted. Initializing...",
+                    "[Network] Bypassing firewall...",
+                    "[FiveM] Connecting to server instances...",
+                    "[Server] Fetching external dependencies...",
+                    "[Core] Compiling at 144Hz...",
+                    "[Sys] Executing command payload..."
+                ];
+                const res = responses[Math.floor(Math.random() * responses.length)];
+                logLines = [...logLines, { time: timeStr, level: 'SYS', levelColor: '#34d399', msg: res }];
+                if (logLines.length > 20) logLines = logLines.slice(logLines.length - 20);
+                
+                // Scroll to bottom
+                setTimeout(() => {
+                    if (terminalInputRef) terminalInputRef.scrollIntoView();
+                }, 50);
+            }, 300);
+        }
+    }
 
     const codeSkills = [
         { name: 'C# / Unity', level: 95 },
         { name: 'C++ / Unreal', level: 88 },
+        { name: 'FiveM / Lua', level: 92 },
         { name: 'JavaScript / TypeScript', level: 90 },
         { name: 'Python', level: 82 },
         { name: 'Rust / Godot', level: 75 },
@@ -35,7 +70,7 @@
     ];
 
     const tools = [
-        'Unity', 'Unreal Engine', 'Godot', 'Blender', 'Maya',
+        'Unity', 'Unreal Engine', 'Godot', 'FiveM', 'Blender', 'Maya',
         'Photoshop', 'Substance Painter', 'VS Code', 'Git', 'Docker',
         'Firebase', 'AWS', 'Linux', 'Figma', 'Jira'
     ];
@@ -99,7 +134,12 @@
 </script>
 
 <div class="h-full w-full overflow-y-auto scroll-smooth px-[4%] py-5 custom-scrollbar z-10 relative mt-20">
-    <div class="max-w-[1100px] mx-auto pb-20">
+    <!-- Sylva Living World background -->
+    <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <SylvaScene variant="living-green" />
+    </div>
+    <div class="pointer-events-none fixed inset-0 z-[1] bg-gradient-to-b from-[#0E0C09]/75 via-[#0E0C09]/55 to-[#0E0C09]/90"></div>
+    <div class="relative z-[2] max-w-[1100px] mx-auto pb-20">
 
         <!-- ══════════ HERO CARD ══════════ -->
         <div class="hero-card mb-3 p-8 sm:p-10 relative overflow-hidden group page-transition">
@@ -109,11 +149,11 @@
             <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center mb-7 relative z-10">
                 <div class="relative shrink-0 animate-scale-in">
                     <div class="avatar-glow absolute inset-0 rounded-full"></div>
-                    <img src="/loge.png" alt="Oussama" class="relative w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] rounded-full object-cover border-2 border-white/20 shadow-2xl hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow duration-300">
+                    <img src="/loge.png" alt="Oussama" class="relative w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] rounded-full object-cover border-2 border-white/20 shadow-2xl hover:shadow-[0_0_20px_rgba(212,163,115,0.4)] transition-shadow duration-300">
                 </div>
                 <div class="animate-slide-up">
                     <div class="role-badge inline-flex items-center gap-2 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
-                        <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shadow-[0_0_6px_#3b82f6]"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#E1E0CC] animate-pulse shadow-[0_0_6px_#D4A373]"></span>
                         Game Developer &amp; Senior Engineer
                     </div>
                     <h1 class="text-[38px] sm:text-[54px] md:text-[64px] font-heading font-black uppercase tracking-[-2px] leading-none text-white">
@@ -125,14 +165,14 @@
             <p class="text-[14px] sm:text-[15px] text-white/50 leading-relaxed mb-8 max-w-4xl relative z-10 font-light">
                 Oussama is a passionate Game Developer & Senior Engineer from Algeria who builds mostly because he genuinely enjoys it.
                 Alongside his passion for game development, he's also building
-                <span class="text-blue-400 font-bold">Jannah</span>,
+                <span class="text-[#E1E0CC] font-bold">Jannah</span>,
                 an agency dedicated to creative solutions. Most of his time goes into building immersive game experiences, crafting game mechanics,
                 and experimenting with new engines and frameworks for absolutely no reason other than "it sounded fun."
             </p>
 
             <div class="relative z-10 flex flex-wrap gap-3">
                 <div class="status-badge inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] font-bold tracking-wider">
-                    <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-[0_0_6px_#3b82f6]"></div>
+                    <div class="w-2 h-2 bg-[#E1E0CC] rounded-full animate-pulse shadow-[0_0_6px_#D4A373]"></div>
                     AVAILABLE_FOR_PROJECTS
                 </div>
                 <a href="/cv.pdf" target="_blank" class="dl-btn inline-flex items-center gap-2 px-5 py-2 rounded-full text-[10px] font-bold transition-all duration-300 magnetic-btn ripple hover-glow">
@@ -151,11 +191,11 @@
                     <div class="card-glow card-glow--cyan absolute top-0 right-0 w-40 h-40 -mr-12 -mt-12 rounded-full pointer-events-none"></div>
                     <div class="flex gap-4 items-center mb-5 relative z-10">
                         <div class="icon-box w-10 h-10 rounded-2xl flex items-center justify-center">
-                            <i class="fa-regular fa-id-badge text-sm text-blue-400"></i>
+                            <i class="fa-regular fa-id-badge text-sm text-[#E1E0CC]"></i>
                         </div>
                         <div>
                             <div class="font-bold text-[15px] text-white tracking-tight">Personal Identity</div>
-                            <div class="text-[9px] text-cyan-400 tracking-[0.18em] uppercase font-bold mt-0.5">GAME DEVELOPER</div>
+                            <div class="text-[9px] text-[#D6C9A8] tracking-[0.18em] uppercase font-bold mt-0.5">GAME DEVELOPER</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-y-4 gap-x-3 relative z-10">
@@ -165,7 +205,7 @@
                             { label: 'Experience', value: '6+', unit: 'YRS' },
                             { label: 'Specialty', value: 'Game Dev', unit: '' },
                         ] as item}
-                            <div class="flex flex-col gap-0.5 hover:text-blue-400 transition-colors">
+                            <div class="flex flex-col gap-0.5 hover:text-[#E1E0CC] transition-colors">
                                 <div class="text-[9px] text-white/35 font-bold uppercase tracking-[0.18em]">{item.label}</div>
                                 <div class="font-bold text-[14px] text-white">
                                     {item.value}
@@ -179,13 +219,13 @@
                 <!-- Roadmap -->
                 <div class="bento-card p-6 relative overflow-hidden group flex-1 stagger-item" style="animation-delay: 0.2s;">
                     <div class="absolute bottom-0 left-0 w-full h-[3px] bg-white/5">
-                        <div class="h-full bg-blue-400 w-[75%] shadow-[0_0_12px_rgba(59,130,246,0.7)] relative">
+                        <div class="h-full bg-[#E1E0CC] w-[75%] shadow-[0_0_12px_rgba(212,163,115,0.7)] relative">
                             <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-[0_0_5px_#fff]"></div>
                         </div>
                     </div>
                     <div class="flex justify-between items-center mb-5 relative z-10">
                         <div class="font-bold text-[15px] text-white tracking-tight">Game Dev Roadmap</div>
-                        <div class="text-[9px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full font-bold shadow-[0_0_10px_rgba(59,130,246,0.08)]">75%</div>
+                        <div class="text-[9px] bg-[#D4A373]/10 text-[#E1E0CC] border border-[#D4A373]/20 px-3 py-1 rounded-full font-bold shadow-[0_0_10px_rgba(212,163,115,0.08)]">75%</div>
                     </div>
                     <div class="space-y-3 relative z-10">
                         {#each [
@@ -196,7 +236,7 @@
                         ] as item}
                             <div class="flex items-start gap-3 {item.done ? '' : 'opacity-40 hover:opacity-100 transition-opacity'}">
                                 {#if item.done}
-                                    <i class="fa-solid fa-check text-blue-400 text-[11px] mt-0.5 drop-shadow-[0_0_5px_rgba(59,130,246,0.7)]"></i>
+                                    <i class="fa-solid fa-check text-[#E1E0CC] text-[11px] mt-0.5 drop-shadow-[0_0_5px_rgba(212,163,115,0.7)]"></i>
                                 {:else}
                                     <div class="mt-1 w-3 h-3 rounded-full border-2 border-white/30 shrink-0"></div>
                                 {/if}
@@ -226,7 +266,7 @@
                             {#each activityGrid as col}
                                 <div class="flex flex-col gap-1 flex-1">
                                     {#each col as opacity}
-                                        <div class="rounded-[2px] flex-1 hover:scale-125 transition-transform cursor-default" style="background-color: #3b82f6; opacity: {opacity}; box-shadow: {opacity > 0.7 ? '0 0 4px rgba(59,130,246,0.6)' : 'none'};"></div>
+                                        <div class="rounded-[2px] flex-1 hover:scale-125 transition-transform cursor-default" style="background-color: #D4A373; opacity: {opacity}; box-shadow: {opacity > 0.7 ? '0 0 4px rgba(212,163,115,0.6)' : 'none'};"></div>
                                     {/each}
                                 </div>
                             {/each}
@@ -238,7 +278,7 @@
                             Less
                             <div class="flex gap-1 mx-1">
                                 {#each [0.08, 0.3, 0.6, 1] as op}
-                                    <div class="w-2.5 h-2.5 rounded-[2px]" style="background-color: #3b82f6; opacity: {op};"></div>
+                                    <div class="w-2.5 h-2.5 rounded-[2px]" style="background-color: #D4A373; opacity: {op};"></div>
                                 {/each}
                             </div>
                             More
@@ -269,7 +309,7 @@
                 <div class="bento-card flex-1 flex flex-col relative overflow-hidden group p-0 terminal-card">
                     <div class="terminal-header flex justify-between items-center px-5 py-3 border-b border-white/[0.06] relative z-10">
                         <div class="flex items-center gap-2.5 font-mono text-[10px] text-white/45 tracking-[0.25em] uppercase">
-                            <i class="fa-solid fa-microchip text-blue-400/60 text-[13px]"></i>
+                            <i class="fa-solid fa-microchip text-[#E1E0CC]/60 text-[13px]"></i>
                             GAME_CORE
                         </div>
                         <div class="flex gap-2">
@@ -278,7 +318,7 @@
                             {/each}
                         </div>
                     </div>
-                    <div class="flex-1 p-4 font-mono text-[10px] space-y-2 text-white/45 relative z-10 overflow-y-auto custom-scrollbar">
+                    <div class="flex-1 p-4 font-mono text-[10px] space-y-2 text-white/45 relative z-10 overflow-y-auto custom-scrollbar" onclick={() => terminalInputRef && terminalInputRef.focus()}>
                         {#each logLines as line}
                             <div class="flex gap-3 items-start log-line rounded-lg px-2 py-1 -mx-2 cursor-default transition-colors">
                                 <span class="text-white/25 shrink-0 tabular-nums">{line.time}</span>
@@ -289,8 +329,19 @@
                             </div>
                         {/each}
                         <div class="flex items-center gap-2 pt-1 px-2 -mx-2">
-                            <span class="text-blue-400 text-[11px]">▶</span>
-                            <span class="w-[6px] h-[12px] bg-white/65 rounded-[1px] transition-opacity duration-300" style="opacity: {cursorVisible ? 1 : 0}"></span>
+                            <span class="text-[#E1E0CC] text-[11px] shrink-0">▶</span>
+                            <div class="relative flex-1 flex items-center">
+                                <span class="text-white mr-1 whitespace-pre">{terminalInput}</span>
+                                <span class="w-[6px] h-[12px] bg-white/65 rounded-[1px] transition-opacity duration-300" style="opacity: {cursorVisible ? 1 : 0}"></span>
+                                <input 
+                                    bind:this={terminalInputRef}
+                                    bind:value={terminalInput}
+                                    onkeydown={handleTerminalKeydown}
+                                    type="text" 
+                                    class="absolute inset-0 opacity-0 cursor-text w-full outline-none"
+                                    autocomplete="off" spellcheck="false"
+                                />
+                            </div>
                         </div>
                     </div>
                     <div class="grid grid-cols-3 border-t border-white/[0.06] terminal-footer text-[9px] relative z-10">
@@ -300,11 +351,11 @@
                         </div>
                         <div class="stat-cell p-3 border-r border-white/[0.06] flex flex-col gap-1 items-center justify-center">
                             <span class="text-white/35 tracking-[0.2em] font-mono uppercase">CPU</span>
-                            <span class="font-bold text-[11px] text-cyan-400 drop-shadow-[0_0_6px_rgba(56,189,248,0.5)]">{cpuValue}</span>
+                            <span class="font-bold text-[11px] text-[#D6C9A8] drop-shadow-[0_0_6px_rgba(214,201,168,0.5)]">{cpuValue}</span>
                         </div>
                         <div class="stat-cell p-3 flex flex-col gap-1 items-center justify-center">
                             <span class="text-white/35 tracking-[0.2em] font-mono uppercase">NET</span>
-                            <span class="font-bold text-[11px] text-blue-400 drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]">{netValue}</span>
+                            <span class="font-bold text-[11px] text-[#E1E0CC] drop-shadow-[0_0_6px_rgba(212,163,115,0.5)]">{netValue}</span>
                         </div>
                     </div>
                 </div>
@@ -315,11 +366,11 @@
         <div class="bento-card p-6 mb-3 stagger-item" style="animation-delay: 0.55s;">
             <div class="flex gap-4 items-center mb-5">
                 <div class="icon-box w-10 h-10 rounded-2xl flex items-center justify-center">
-                    <i class="fa-solid fa-terminal text-sm text-blue-400"></i>
+                    <i class="fa-solid fa-terminal text-sm text-[#E1E0CC]"></i>
                 </div>
                 <div>
                     <div class="font-bold text-[15px] text-white tracking-tight">Code Proficiency</div>
-                    <div class="text-[9px] text-cyan-400 tracking-[0.18em] uppercase font-bold mt-0.5">DAILY GRIND</div>
+                    <div class="text-[9px] text-[#D6C9A8] tracking-[0.18em] uppercase font-bold mt-0.5">DAILY GRIND</div>
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
@@ -327,10 +378,10 @@
                     <div class="flex flex-col gap-1.5">
                         <div class="flex justify-between items-center">
                             <span class="text-[12px] text-white/70 font-medium">{skill.name}</span>
-                            <span class="text-[10px] text-blue-400 font-mono font-bold">{skill.level}%</span>
+                            <span class="text-[10px] text-[#E1E0CC] font-mono font-bold">{skill.level}%</span>
                         </div>
                         <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-1000" style="width: {skill.level}%; box-shadow: 0 0 8px rgba(59,130,246,0.4);"></div>
+                            <div class="h-full rounded-full bg-gradient-to-r from-[#D4A373] to-[#D6C9A8] transition-all duration-1000" style="width: {skill.level}%; box-shadow: 0 0 8px rgba(212,163,115,0.4);"></div>
                         </div>
                     </div>
                 {/each}
@@ -341,23 +392,23 @@
         <div class="bento-card p-6 mb-3 stagger-item" style="animation-delay: 0.6s;">
             <div class="flex gap-4 items-center mb-5">
                 <div class="icon-box w-10 h-10 rounded-2xl flex items-center justify-center">
-                    <i class="fa-solid fa-wrench text-sm text-cyan-400"></i>
+                    <i class="fa-solid fa-wrench text-sm text-[#D6C9A8]"></i>
                 </div>
                 <div>
                     <div class="font-bold text-[15px] text-white tracking-tight">Tools &amp; Ecosystem</div>
-                    <div class="text-[9px] text-cyan-400 tracking-[0.18em] uppercase font-bold mt-0.5">ARSENAL</div>
+                    <div class="text-[9px] text-[#D6C9A8] tracking-[0.18em] uppercase font-bold mt-0.5">ARSENAL</div>
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
                 {#each tools as tool}
-                    <span class="text-[11px] font-medium px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-blue-500/10 hover:border-blue-500/20 hover:text-blue-400 transition-all duration-300 cursor-default">{tool}</span>
+                    <span class="text-[11px] font-medium px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-[#D4A373]/10 hover:border-[#D4A373]/20 hover:text-[#E1E0CC] transition-all duration-300 cursor-default">{tool}</span>
                 {/each}
             </div>
         </div>
 
         <!-- ══════════ SERVICES HEADER ══════════ -->
         <div class="mb-3 stagger-item" style="animation-delay: 0.65s;">
-            <div class="text-[10px] text-blue-400 font-bold tracking-[3px] mb-2 uppercase font-mono drop-shadow-[0_0_5px_rgba(59,130,246,0.3)]">[ WHAT_I_BUILD ]</div>
+            <div class="text-[10px] text-[#E1E0CC] font-bold tracking-[3px] mb-2 uppercase font-mono drop-shadow-[0_0_5px_rgba(212,163,115,0.3)]">[ WHAT_I_BUILD ]</div>
             <h2 class="font-heading text-3xl lg:text-4xl uppercase tracking-tighter text-white">GAME DEVELOPMENT<br><span class="text-white/30">&amp; ENGINEERING SOLUTIONS</span></h2>
         </div>
 
@@ -367,7 +418,7 @@
                 <div class="bento-card p-6 relative overflow-hidden group stagger-item border-glow hover-glow cursor-default" style="animation-delay: {0.7 + i * 0.05}s;">
                     <div class="flex gap-4 items-start mb-4">
                         <div class="icon-box w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                            <i class="{service.icon} text-sm text-blue-400"></i>
+                            <i class="{service.icon} text-sm text-[#E1E0CC]"></i>
                         </div>
                         <div>
                             <div class="font-bold text-[14px] text-white tracking-tight mb-1">{service.title}</div>
@@ -376,7 +427,7 @@
                     </div>
                     <div class="flex flex-wrap gap-1.5 ml-14">
                         {#each service.tags as tag}
-                            <span class="text-[9px] font-bold px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400/70">{tag}</span>
+                            <span class="text-[9px] font-bold px-2 py-1 rounded-full bg-[#D4A373]/10 border border-[#D4A373]/20 text-[#E1E0CC]/70">{tag}</span>
                         {/each}
                     </div>
                 </div>
@@ -385,7 +436,7 @@
 
         <!-- ══════════ TECH STACK ══════════ -->
         <div class="mb-3 stagger-item" style="animation-delay: 0.9s;">
-            <div class="text-[10px] text-blue-400 font-bold tracking-[3px] mb-2 uppercase font-mono drop-shadow-[0_0_5px_rgba(59,130,246,0.3)]">[ TECHNICAL_ARSNL ]</div>
+            <div class="text-[10px] text-[#E1E0CC] font-bold tracking-[3px] mb-2 uppercase font-mono drop-shadow-[0_0_5px_rgba(212,163,115,0.3)]">[ TECHNICAL_ARSNL ]</div>
             <h2 class="font-heading text-3xl lg:text-4xl uppercase tracking-tighter text-white">ENGINES &amp; <span class="text-gradient">TECHNOLOGIES</span></h2>
         </div>
 
@@ -398,10 +449,10 @@
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex justify-between items-center">
                                     <span class="text-[12px] text-white/70 font-medium">{item.name}</span>
-                                    <span class="text-[10px] text-blue-400 font-mono font-bold">{item.pct}%</span>
+                                    <span class="text-[10px] text-[#E1E0CC] font-mono font-bold">{item.pct}%</span>
                                 </div>
                                 <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                    <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" style="width: {item.pct}%; box-shadow: 0 0 6px rgba(59,130,246,0.3);"></div>
+                                    <div class="h-full rounded-full bg-gradient-to-r from-[#D4A373] to-[#D6C9A8]" style="width: {item.pct}%; box-shadow: 0 0 6px rgba(212,163,115,0.3);"></div>
                                 </div>
                             </div>
                         {/each}
@@ -423,8 +474,8 @@
         transition: border-color 0.4s, box-shadow 0.4s, transform 0.3s;
     }
     .hero-card:hover {
-        border-color: rgba(59, 130, 246, 0.2);
-        box-shadow: 0 8px 50px rgba(59, 130, 246, 0.1);
+        border-color: rgba(212, 163, 115, 0.2);
+        box-shadow: 0 8px 50px rgba(212, 163, 115, 0.1);
         transform: translateY(-2px);
     }
     .watermark-text {
@@ -437,21 +488,21 @@
         background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 3px);
     }
     .avatar-glow {
-        background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(212, 163, 115, 0.4) 0%, transparent 70%);
         filter: blur(20px);
         transform: scale(1.1);
         transition: opacity 0.4s;
     }
     .hero-card:hover .avatar-glow { opacity: 0.7; }
     .role-badge {
-        background: rgba(59, 130, 246, 0.08);
-        border: 1px solid rgba(59, 130, 246, 0.18);
-        color: #60a5fa;
+        background: rgba(212, 163, 115, 0.08);
+        border: 1px solid rgba(212, 163, 115, 0.18);
+        color: #E1E0CC;
     }
     .status-badge {
-        background: rgba(59, 130, 246, 0.08);
-        border: 1px solid rgba(59, 130, 246, 0.22);
-        color: #60a5fa;
+        background: rgba(212, 163, 115, 0.08);
+        border: 1px solid rgba(212, 163, 115, 0.22);
+        color: #E1E0CC;
     }
     .dl-btn {
         background: rgba(255,255,255,0.05);
@@ -459,9 +510,9 @@
         color: rgba(255,255,255,0.85);
     }
     .dl-btn:hover {
-        background: rgba(59, 130, 246, 0.1);
-        border-color: rgba(59, 130, 246, 0.3);
-        color: #60a5fa;
+        background: rgba(212, 163, 115, 0.1);
+        border-color: rgba(212, 163, 115, 0.3);
+        color: #E1E0CC;
     }
     .bento-card {
         background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
@@ -472,33 +523,33 @@
         transition: border-color 0.35s, box-shadow 0.35s, transform 0.25s;
     }
     .bento-card:hover {
-        border-color: rgba(59, 130, 246, 0.2);
-        box-shadow: 0 8px 35px rgba(59, 130, 246, 0.08);
+        border-color: rgba(212, 163, 115, 0.2);
+        box-shadow: 0 8px 35px rgba(212, 163, 115, 0.08);
         transform: translateY(-2px);
     }
     .card-glow { opacity: 0; transition: opacity 0.4s; }
     .bento-card:hover .card-glow { opacity: 1; }
-    .card-glow--cyan { background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%); }
-    .card-glow--pink { background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%); }
+    .card-glow--cyan { background: radial-gradient(circle, rgba(214, 201, 168, 0.12) 0%, transparent 70%); }
+    .card-glow--pink { background: radial-gradient(circle, rgba(212, 163, 115, 0.12) 0%, transparent 70%); }
     .icon-box {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.03));
-        border: 1px solid rgba(59, 130, 246, 0.15);
+        background: linear-gradient(135deg, rgba(212, 163, 115, 0.1), rgba(212, 163, 115, 0.03));
+        border: 1px solid rgba(212, 163, 115, 0.15);
     }
     .github-badge {
-        background: rgba(59, 130, 246, 0.08);
-        border: 1px solid rgba(59, 130, 246, 0.2);
-        color: #60a5fa;
+        background: rgba(212, 163, 115, 0.08);
+        border: 1px solid rgba(212, 163, 115, 0.2);
+        color: #E1E0CC;
         transition: background 0.2s;
     }
-    .github-badge:hover { background: rgba(59, 130, 246, 0.15); }
+    .github-badge:hover { background: rgba(212, 163, 115, 0.15); }
     .focus-tag {
-        background: rgba(59, 130, 246, 0.12);
-        border: 1px solid rgba(59, 130, 246, 0.2);
-        color: #60a5fa;
+        background: rgba(212, 163, 115, 0.12);
+        border: 1px solid rgba(212, 163, 115, 0.2);
+        color: #E1E0CC;
     }
     .progress-gradient {
-        background: linear-gradient(90deg, #3b82f6, #60a5fa, #38bdf8);
-        box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+        background: linear-gradient(90deg, #D4A373, #E1E0CC, #D6C9A8);
+        box-shadow: 0 0 12px rgba(212, 163, 115, 0.5);
     }
     .terminal-card {
         background: linear-gradient(160deg, rgba(5,5,10,0.85) 0%, rgba(10,8,20,0.9) 100%);

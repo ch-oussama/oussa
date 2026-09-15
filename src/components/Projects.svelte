@@ -1,102 +1,332 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+    import TempleNightScene from './TempleNightScene.svelte';
+
+    let showScene = false;
+    let activeFilter = 'all';
+    let mounted = false;
+
+    onMount(() => {
+        setTimeout(() => {
+            showScene = true;
+        }, 300);
+        requestAnimationFrame(() => {
+            mounted = true;
+        });
+    });
+
+    const categories = [
+        { id: 'all', label: 'All Projects', icon: 'fa-solid fa-layer-group' },
+        { id: 'games', label: 'Games & FiveM', icon: 'fa-solid fa-gamepad' },
+        { id: 'web', label: 'Web & App', icon: 'fa-solid fa-laptop-code' },
+        { id: 'tools', label: 'Tools', icon: 'fa-solid fa-wrench' },
+    ];
+
     const projects = [
         {
-            id: '01',
-            title: 'Doora Taxi App',
-            desc: 'App icon and brand identity design for Doora, a modern ride-hailing app. Clean, bold identity built for mobile-first recognition.',
-            tags: ['UI/UX', 'App Icon', 'Branding'],
-            img: '/doora_apps.png',
-            dark: true,
-            icon: 'fa-solid fa-mobile-screen'
+            title: 'Arab Mediators',
+            subtitle: 'Escrow & Trade Mediation Web Hub',
+            desc: 'Official digital escrow and trusted trade mediation platform on Discord with live community statistics and dynamic fee calculation workflows.',
+            tags: ['Next.js 15', 'TypeScript', 'Discord API', 'Tailwind'],
+            img: '/doora_apps.png', // Fallback image path
+            category: 'web',
+            link: '#',
         },
         {
-            id: '02',
-            title: 'Duobix Studio',
-            desc: 'Full brand identity and social media assets for Duobix Studio — a creative agency offering design, build & launch services.',
-            tags: ['Branding', 'Social Media', 'Arabic'],
+            title: 'Oufa',
+            subtitle: 'Graphic Design Engineering Showcase',
+            desc: 'Bespoke digital portfolio featuring custom audio introduction players, atmospheric themes, and interactive milestones.',
+            tags: ['Next.js', 'TypeScript', 'Web Audio API', 'Canvas'],
             img: '/lb.png',
-            dark: false,
-            icon: 'fa-solid fa-fingerprint'
+            category: 'web',
+            link: '#',
         },
         {
-            id: '03',
-            title: 'DEER Clothing',
-            desc: 'Minimal Arabic streetwear brand identity. Logo, color palette, and mockup visuals for DEER Arabic Clothes.',
-            tags: ['Fashion', 'Branding', 'Logo'],
+            title: 'NoPixel Inspired Core',
+            subtitle: 'FiveM Roleplay Framework',
+            desc: 'A highly optimized, custom roleplay framework built for FiveM. Features custom inventory systems, dynamic economy, and real-time database syncing.',
+            tags: ['Lua', 'FiveM', 'SQL', 'Node.js'],
             img: '/larkdear_brandd.png',
-            dark: false,
-            icon: 'fa-solid fa-shirt'
+            category: 'games',
+            link: '#',
         },
         {
-            id: '04',
-            title: 'Social Media Designs',
-            desc: 'High-impact social media visuals for multiple brands — iFruit beverage, SABR clothing drop, and Hamoud Boualem Limonade.',
-            tags: ['Social Media', 'Marketing', 'Poster'],
+            title: 'Jannah DevTools',
+            subtitle: 'CLI Utility Toolkit',
+            desc: 'A suite of command-line tools built for rapid game development workflows. Automates asset packing, texture compression, and deployment.',
+            tags: ['Rust', 'CLI', 'Automation'],
             img: '/asocial_msse.png',
-            dark: true,
-            icon: 'fa-solid fa-bullhorn'
+            category: 'tools',
+            link: '#',
         },
         {
-            id: '05',
-            title: 'YouTube Thumbnails',
-            desc: 'High-CTR thumbnail designs with strong contrast, cinematic compositing, and visual storytelling to maximize click-through rates.',
-            tags: ['Thumbnail', 'YouTube', 'Compositing'],
+            title: 'Shadowfall Arena',
+            subtitle: 'Multiplayer FPS Prototype',
+            desc: 'A fast-paced multiplayer FPS prototype built in Unreal Engine 5 with custom C++ movement mechanics and dedicated server architecture.',
+            tags: ['Unreal Engine 5', 'C++', 'Multiplayer'],
             img: '/larken_info_2.png',
-            dark: false,
-            icon: 'fa-brands fa-youtube'
+            category: 'games',
+            link: '#',
         },
         {
-            id: '06',
-            title: 'Brit — Logo Design',
-            desc: 'Clean, modern logo mark for Brit — a smart tech brand. Minimalist wordmark with strong brand character and futuristic aesthetic.',
-            tags: ['Logo', 'Brand Identity', 'Tech'],
+            title: 'Server Analytics Dashboard',
+            subtitle: 'Real-time Game Server Monitoring',
+            desc: 'A real-time dashboard for monitoring game server health, active players, and resource consumption with visual graphs and alerts.',
+            tags: ['React', 'WebSocket', 'Express', 'Charts'],
             img: '/brite.png',
-            dark: true,
-            icon: 'fa-solid fa-pen-nib'
+            category: 'tools',
+            link: '#',
         }
     ];
+
+    $: filteredProjects = activeFilter === 'all'
+        ? projects
+        : projects.filter(p => p.category === activeFilter);
+
+    $: projectCount = (cat: string) => cat === 'all'
+        ? projects.length
+        : projects.filter(p => p.category === cat).length;
 </script>
 
-<div class="h-full w-full overflow-y-auto px-[5%] py-[20px] custom-scrollbar z-10 relative mt-20">
-    <div class="max-w-[1200px] mx-auto pb-[100px] pt-6">
-        <div class="mb-12 animate-slide-up">
-            <div class="text-[10px] text-blue-400 font-bold tracking-[3px] mb-2 uppercase font-mono drop-shadow-[0_0_5px_rgba(59,130,246,0.3)]">[ CREATIVE_WORK ]</div>
-            <h2 class="font-heading text-4xl lg:text-5xl uppercase tracking-tighter text-white">SELECTED<br>PROJECTS</h2>
+<div class="projects-page h-full w-full overflow-y-auto custom-scrollbar z-10 relative mt-20">
+    <!-- Background -->
+    <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden transition-opacity duration-1000 {showScene ? 'opacity-100' : 'opacity-0'}">
+        {#if showScene}
+            <TempleNightScene variant="temple-night" />
+        {/if}
+    </div>
+    <div class="pointer-events-none fixed inset-0 z-[1] bg-gradient-to-b from-[#0E0C09]/75 via-[#0E0C09]/60 to-[#0E0C09]/90"></div>
+
+    <div class="relative z-[2] max-w-[1350px] mx-auto px-6 md:px-10 pb-[120px] pt-8">
+
+        <!-- Header -->
+        <div class="text-center mb-14 proj-fade" class:proj-visible={mounted} style="transition-delay: 0.1s;">
+            <div class="text-[10px] font-mono font-bold tracking-[0.3em] text-[#D6C9A8] uppercase mb-4">PORTFOLIO & WORKS</div>
+            <h2 class="font-heading text-[clamp(2rem,6vw,3.5rem)] uppercase tracking-[-2px] text-white leading-[0.95] mb-5">
+                FEATURED<br>PROJECTS
+            </h2>
+            <p class="text-[13px] text-white/50 max-w-lg mx-auto leading-relaxed">
+                A curated collection of production web platforms, bespoke creative systems, and interactive digital products.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {#each projects as p, i}
-                <div class="relative overflow-hidden group rounded-3xl border border-white/8 bg-white/3 backdrop-blur-sm flex flex-col justify-between min-h-[320px] cursor-pointer transition-all duration-500 hover:border-blue-500/30 hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] hover:-translate-y-2 tilt-card stagger-item" style="animation-delay: {0.1 * (i + 1)}s;">
-                    <div class="absolute inset-0 z-0">
-                        <img src={p.img} alt={p.title} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/70 to-[#0a0a0f]/50 group-hover:from-[#0a0a0f]/95 group-hover:via-[#0a0a0f]/40 group-hover:to-[#0a0a0f]/10 transition-all duration-500"></div>
-                    </div>
-                    <div class="relative z-10 p-6 sm:p-8 h-full flex flex-col justify-between">
-                        <div class="flex justify-between items-start">
-                            <div class="text-[10px] font-mono font-bold text-white/40 tracking-widest">{p.id}</div>
-                            <div class="w-10 h-10 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center text-white group-hover:border-blue-400 group-hover:text-blue-400 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] group-hover:scale-110 transition-all duration-300">
-                                <i class="{p.icon} text-[14px]"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-xl sm:text-2xl font-bold tracking-tight mb-2 text-white drop-shadow-lg">{p.title}</h3>
-                            <p class="text-[12px] text-white/60 leading-relaxed mb-4 max-w-[90%] opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 delay-75">
-                                {p.desc}
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                {#each p.tags as tag}
-                                    <span class="text-[10px] font-bold px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white/80 group-hover:bg-blue-500/20 group-hover:border-blue-400/30 group-hover:text-blue-300 transition-all duration-300 hover:scale-105">
-                                        {tag}
-                                    </span>
-                                {/each}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    </div>
-                </div>
+        <!-- Category Filters -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12 proj-fade" class:proj-visible={mounted} style="transition-delay: 0.2s;">
+            {#each categories as cat}
+                <button
+                    class="filter-btn"
+                    class:active={activeFilter === cat.id}
+                    onclick={() => activeFilter = cat.id}
+                >
+                    <i class="{cat.icon} text-[11px] opacity-70"></i> {cat.label} <span class="filter-count">({projectCount(cat.id)})</span>
+                </button>
             {/each}
         </div>
+
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+            {#each filteredProjects as p, i (p.title)}
+                <article class="project-card proj-fade" class:proj-visible={mounted} style="transition-delay: {0.2 + 0.1 * (i + 1)}s;">
+                    <!-- Image Preview -->
+                    <div class="card-image-wrap">
+                        <img src={p.img} alt={p.title} class="card-image" loading="lazy" />
+                        <div class="card-image-overlay"></div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="card-content">
+                        <h3 class="card-title">{p.title}</h3>
+                        <div class="card-subtitle">{p.subtitle}</div>
+                        <p class="card-desc">{p.desc}</p>
+
+                        <!-- Tags -->
+                        <div class="card-tags">
+                            {#each p.tags as tag}
+                                <span class="card-tag">{tag}</span>
+                            {/each}
+                        </div>
+
+                        <!-- Visit Button -->
+                        <a href={p.link} target="_blank" rel="noopener noreferrer" class="visit-btn">
+                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+                </article>
+            {/each}
+        </div>
+
     </div>
 </div>
+
+<style>
+    .projects-page {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* --- Fade In Animation --- */
+    .proj-fade {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .proj-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* --- Filter Buttons --- */
+    .filter-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 20px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(8px);
+    }
+    .filter-btn:hover {
+        border-color: rgba(225, 224, 204, 0.3);
+        color: white;
+        background: rgba(255, 255, 255, 0.08);
+    }
+    .filter-btn.active {
+        background: rgba(225, 224, 204, 0.12);
+        border-color: rgba(225, 224, 204, 0.35);
+        color: #E1E0CC;
+        box-shadow: 0 0 20px rgba(212, 163, 115, 0.15);
+    }
+    .filter-count {
+        font-size: 10px;
+        opacity: 0.5;
+        font-weight: 400;
+    }
+
+    /* --- Project Card --- */
+    .project-card {
+        background: rgba(20, 18, 15, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        backdrop-filter: blur(12px);
+    }
+    .project-card:hover {
+        border-color: rgba(212, 163, 115, 0.25);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(212, 163, 115, 0.08);
+        transform: translateY(-6px);
+    }
+
+    /* --- Card Image --- */
+    .card-image-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project-card:hover .card-image {
+        transform: scale(1.06);
+    }
+    .card-image-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(20, 18, 15, 0.4) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    /* --- Card Content --- */
+    .card-content {
+        padding: 24px 28px 28px;
+    }
+    .card-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: -0.02em;
+        margin-bottom: 4px;
+    }
+    .card-subtitle {
+        font-size: 12px;
+        color: rgba(225, 224, 204, 0.5);
+        font-weight: 500;
+        font-style: italic;
+        margin-bottom: 12px;
+    }
+    .card-desc {
+        font-size: 13px;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 18px;
+    }
+
+    /* --- Tags --- */
+    .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+    .card-tag {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.55);
+        transition: all 0.3s ease;
+    }
+    .project-card:hover .card-tag {
+        border-color: rgba(212, 163, 115, 0.2);
+        color: rgba(225, 224, 204, 0.7);
+        background: rgba(212, 163, 115, 0.08);
+    }
+
+    /* --- Visit Button --- */
+    .visit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px;
+        border-radius: 999px;
+        border: 1px solid rgba(225, 224, 204, 0.25);
+        background: transparent;
+        color: #E1E0CC;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    .visit-btn:hover {
+        background: rgba(225, 224, 204, 0.1);
+        border-color: rgba(225, 224, 204, 0.5);
+        box-shadow: 0 0 20px rgba(212, 163, 115, 0.15);
+        transform: translateX(4px);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+        .card-content {
+            padding: 18px 20px 22px;
+        }
+        .card-title {
+            font-size: 17px;
+        }
+        .card-desc {
+            font-size: 12px;
+        }
+    }
+</style>
